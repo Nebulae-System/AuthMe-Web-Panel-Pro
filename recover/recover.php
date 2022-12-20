@@ -15,7 +15,7 @@
     header('location: /login');
   }
 
-  if($_SESSION['vkey']){
+  if($_SESSION['token']){
     if($_SESSION['recover'] !== TRUE){
       header('location: /register');
     }
@@ -39,7 +39,7 @@
       ]; 
       $pass_hash = password_hash($pass1, PASSWORD_BCRYPT, $options);
 
-      $sql = "UPDATE authme SET password='".$pass_hash."' WHERE email='".$_SESSION['email']."'";
+      $sql = "UPDATE ".$table." SET password='".$pass_hash."' WHERE email='".$_SESSION['email']."'";
       $_SESSION['password'] = $pass_hash;
       unset($_SESSION['recover']);
 
@@ -53,15 +53,15 @@
 
   if(isset($_POST['verificar'])){
     if($_POST['code'] == ""){
-      $error = $vkey_empty;
-    }else if($_POST['code'] == $_SESSION['vkey']){
-      unset($_SESSION['vkey']);
-      $sql = "UPDATE authme SET vkey='VERIFY' WHERE email='".$_SESSION['email']."'";
+      $error = $token_empty;
+    }else if($_POST['code'] == $_SESSION['token']){
+      unset($_SESSION['token']);
+      $sql = "UPDATE ".$table." SET token='VERIFIED' WHERE email='".$_SESSION['email']."'";
       if ($conn->query($sql) === FALSE) {
-        $_SESSION['vkey'] = $_POST['code'];
+        $_SESSION['token'] = $_POST['code'];
         $error = $try_again;
       }else{
-        unset($_SESSION['vkey']);
+        unset($_SESSION['token']);
         header('location: /login');
       }
     }else{
@@ -74,17 +74,17 @@
       $error = $please_email;
     }else{
       $email = $_POST['email'];
-      $result = mysqli_query($conn, "SELECT * FROM authme WHERE email='".$email."'");
+      $result = mysqli_query($conn, "SELECT * FROM ".$table." WHERE email='".$email."'");
       if(mysqli_num_rows($result) == 1) {
         $fetch = mysqli_fetch_array($result);
   
-        $vkey = random_int(100000, 999999);
+        $token = random_int(100000, 999999);
   
         $to = $email;
         $subject = "Codigo de Verificacion";
         
         $message = "<h1>Tu codigo es:</h1>";
-        $message .= "<h1>".$vkey."</h1>";
+        $message .= "<h1>".$token."</h1>";
         
         $header = "From:".$companymail." \r\n";
         // $header .= "Cc:afgh@somedomain.com \r\n";
@@ -98,7 +98,7 @@
           $error = $smtp_error;
         }else{
           // Crear UPDATE
-          $sql = "UPDATE authme SET vkey='".$vkey."' WHERE email='".$email."'";
+          $sql = "UPDATE ".$table." SET token='".$token."' WHERE email='".$email."'";
 
           if ($conn->query($sql) === FALSE) {
             $error = $try_again;
@@ -106,7 +106,7 @@
             $_SESSION['username'] = $fetch['username'];
             $_SESSION['realname'] = $fetch['realname'];
             $_SESSION['email'] = $fetch['email'];
-            $_SESSION['vkey'] = $vkey;
+            $_SESSION['token'] = $token;
             $_SESSION['recover'] = TRUE;
           }
         }

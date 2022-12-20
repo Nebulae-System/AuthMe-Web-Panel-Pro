@@ -10,24 +10,38 @@
   
   // CREAMOS LA CONEXION
   $conn = new mysqli($ip, $user, $pass, $db);
+  try{
+    $row = mysqli_query($conn, "ALTER TABLE ".$table." ADD column token VARCHAR(8) AFTER totp;");
+  }catch (Exception $e){
+    if (str_contains($e , "mysqli_sql_exception: Duplicate column name 'token'") == false){
+      echo "<h1>Error:</h1>".$e."<br><h2>New Authme Panel PRO Requiere <a href='https://www.spigotmc.org/resources/authmereloaded.6269/'>AuthMeReloaded</a>.<br>(Requiere configurar base de datos).<br><br>Si el problema persiste, revisa la configuracion del sitio web y compara con la base de datos.</h2>";
+      exit();
+    }
+  }
 
   if($_SESSION['recover']){
     header('location: /recover');
   }
   
-  if($_SESSION['vkey']){
-    $result = mysqli_query($conn, "SELECT vkey FROM authme WHERE username='".$_SESSION['username']."'");
+  if($_SESSION['token']){
+    $result = mysqli_query($conn, "SELECT token FROM ".$table." WHERE username='".$_SESSION['username']."'");
     if(mysqli_num_rows($result) == 1) {
       $fetch = mysqli_fetch_array($result);
-      if($fetch['vkey'] !== "VERIFY"){
-        $_SESSION['vkey'] = $fetch['vkey'];
+      if($fetch['token'] !== "VERIFIED"){
+        $_SESSION['token'] = $fetch['token'];
         header('location: /register');
       }
+    }else{
+      echo "poto";
     }
   }
 
   if(isset($_SESSION['username'])){
-    $result = mysqli_query($conn, "SELECT * FROM Players WHERE Nick='".$_SESSION['username']."'");
+    try{
+      $result = mysqli_query($conn, "SELECT * FROM Players WHERE Nick='".$_SESSION['username']."'");
+    }catch (Exception $e){
+      echo "<h1>Error:</h1>".$e."<br><h2>New Authme Panel PRO Requiere <a href='https://www.spigotmc.org/resources/skinsrestorer.2124/'>SkinsRestorer</a>.<br>(Requiere configurar base de datos).</h2>";
+    }
     if(mysqli_num_rows($result) == 1) {
       $fetch = mysqli_fetch_array($result);
       // Tiene una skin que no es su nombre
@@ -35,7 +49,7 @@
     }else{
       $_SESSION['skin'] = getskin($_SESSION['realname']);
     }
-    $logged = mysqli_query($conn, "SELECT isLogged FROM authme WHERE username='".$_SESSION['username']."'");
+    $logged = mysqli_query($conn, "SELECT isLogged FROM ".$table." WHERE username='".$_SESSION['username']."'");
     $fetch = mysqli_fetch_array($logged);
     $_SESSION['online'] = $fetch['isLogged'];
   }
@@ -88,7 +102,7 @@
 
     $user = strtolower($user);
 
-    $result = mysqli_query($conn, "SELECT * FROM authme WHERE username='".$user."'");
+    $result = mysqli_query($conn, "SELECT * FROM ".$table." WHERE username='".$user."'");
     if(mysqli_num_rows($result) == 1) {
       $fetch = mysqli_fetch_array($result);
       if (password_verify($pass, $fetch['password'])) {
@@ -96,11 +110,11 @@
         $_SESSION['realname'] = $fetch['realname'];
         $_SESSION['password'] = $fetch['password'];
         $_SESSION['email'] = $fetch['email'];
-        $_SESSION['vkey'] = $fetch['vkey'];
+        $_SESSION['token'] = $fetch['token'];
         //$_SESSION['ip'] = $fetch['ip'];
         $_SESSION['online'] = $fetch['isLogged'];
 
-        if($_SESSION['vkey'] !== "VERIFY"){
+        if($_SESSION['token'] !== "VERIFIED"){
           header('location: /register');
         }
         
@@ -129,7 +143,7 @@
     unset($_SESSION['password']);
     unset($_SESSION['email']);
     unset($_SESSION['skin']);
-    unset($_SESSION['vkey']);
+    unset($_SESSION['token']);
     session_destroy();
     // header('location: /login');
   }

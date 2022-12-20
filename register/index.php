@@ -2,15 +2,19 @@
 <!DOCTYPE html>
 <html>
 <?php include('../header.php'); ?>
-  <?php if($_SESSION['vkey'] !== NULL){ ?>
-    <form class="container" method="post" novalidate>
-      <?php //echo $_SESSION['vkey'] ?>
-      <h1>Verifica tu Email</h1>
-      <p>Busca el codigo de verificacion que hemos enviado a tu email.</p>
-      <input type="text" name="code" id="vkey" placeholder="Codigo de verificacion" required><br>
-      <div class="hint"><img src="https://img.icons8.com/material/16/info--v1.png" draggable="false" oncontextmenu="return false"><p>Tal vez el codigo se encuentre en spam.</p></div>
-      <input class="submit" type="submit" name="vkey" value="Enviar Codigo">
-    </form>
+  <?php if($_SESSION['token']){ ?>
+    <?php if($_SESSION['token'] !== "VERIFIED"){ ?>
+      <form class="container" method="post" novalidate>
+        <?php //echo $_SESSION['token'] ?>
+        <h1>Verifica tu Email</h1>
+        <p>Busca el codigo de verificacion que hemos enviado a tu email.</p>
+        <input type="text" name="code" id="token" placeholder="Codigo de verificacion" required><br>
+        <div class="hint"><img src="https://img.icons8.com/material/16/info--v1.png" draggable="false" oncontextmenu="return false"><p>Tal vez el codigo se encuentre en spam.</p></div>
+        <input class="submit" type="submit" name="token" value="Enviar Codigo">
+      </form>
+    <?php }else{
+      header('location: /login');
+    } ?>
   <?php }else{ ?>
     <form method="post" action="" class="container" novalidate>
       <?php if ($conn->connect_error) { ?>

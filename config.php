@@ -2,17 +2,27 @@
 
 // OPCIONES EDITABLES | CONFIG
 
+// RECUERDA CAMBIAR EL CAMPO:
+// passwordHash: BCRYPT
+// kickNonRegistered: true
+// registration:
+//      Enable registration on the server?
+//      enabled: false
+// DEL ARCHIVO CONFIG DE AUTHME
+
 // IP O DOMINIO DEL HOST:
-$ip = "ip";
+$ip = "localhost";
 
 // NOMBRE USARIO SQL
-$user = "user";
+$user = "root";
 
 // CLAVE USUARIO SQL
-$pass = "pass";
+$pass = "";
 
 // NOMBRE BASE DE DATOS
-$db = "db";
+$db = "minecraft";
+
+$table = "authme";
 
 
 // EMAIL EMPRESA:
@@ -57,7 +67,7 @@ $pass_lenght       = "Tu contraseña debe tener minimo 8 caracteres...";
 
 $registration_problem = "Ocurrio un problema, por favor intentelo nuevamente...";
 
-$vkey_empty        = "Por favor ingresa el codigo de verificacion que hemos enviado a tu email...";
+$token_empty        = "Por favor ingresa el codigo de verificacion que hemos enviado a tu email...";
 
 $try_again         = "Por favor intentelo nuevamente...";
 

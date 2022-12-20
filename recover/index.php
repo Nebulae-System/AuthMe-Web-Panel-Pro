@@ -3,18 +3,18 @@
 <html>
 <?php include('../header.php'); ?>
 
-  <?php if($_SESSION['vkey']){ ?>
+  <?php if($_SESSION['token']){ ?>
     <form class="container" method="post" novalidate>
-      <?php //echo $_SESSION['vkey'] ?>
+      <?php //echo $_SESSION['token'] ?>
       <h1>Verifica tu Email</h1>
       <p>Busca el codigo de verificacion que hemos enviado a tu email.</p>
-      <input type="text" name="code" id="vkey" placeholder="Codigo de verificacion" required><br>
+      <input type="text" name="code" id="token" placeholder="Codigo de verificacion" required><br>
       <div class="hint"><img src="https://img.icons8.com/material/16/info--v1.png" draggable="false" oncontextmenu="return false"><p>Tal vez el codigo se encuentre en spam.</p></div>
       <input class="submit" type="submit" name="verificar" value="Verificar Identidad">
     </form>
   <?php }else if($_SESSION['recover']){ ?>
     <form class="container" method="post" novalidate>
-      <?php //echo $_SESSION['vkey'] ?>
+      <?php //echo $_SESSION['token'] ?>
       <h1>Establecer Contraseña</h1>
       <input type="password" name="pass1" id="pass1" placeholder="Nueva Contraseña" required><br>
       <div class="hint"><img src="https://img.icons8.com/material/16/info--v1.png" draggable="false" oncontextmenu="return false"><p>Ingresa tu nueva contraseña.</p></div>

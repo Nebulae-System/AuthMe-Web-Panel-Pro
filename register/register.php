@@ -19,24 +19,24 @@
     header('location: /recover');
   }
 
-  if($_SESSION['vkey']){
-    $result = mysqli_query($conn, "SELECT vkey FROM authme WHERE username='".$_SESSION['username']."'");
+  if($_SESSION['token']){
+    $result = mysqli_query($conn, "SELECT token FROM ".$table." WHERE username='".$_SESSION['username']."'");
     if(mysqli_num_rows($result) == 1) {
       $fetch = mysqli_fetch_array($result);
-      if($fetch['vkey'] !== "VERIFY"){
-        if($_SESSION['vkey'] !== "VERIFY"){
+      if($fetch['token'] !== "VERIFIED"){
+        if($_SESSION['token'] !== "VERIFIED"){
           $error = $need_verification;
-          // echo $_SESSION['vkey'];
+          // echo $_SESSION['token'];
         }else{
           header('location: /login');
         }
       }
     }
   }
-  if($_SESSION['vkey']){
-    if($_SESSION['vkey'] !== "VERIFY"){
+  if($_SESSION['token']){
+    if($_SESSION['token'] !== "VERIFIED"){
       $error = $need_verification;
-      // echo $_SESSION['vkey'];
+      // echo $_SESSION['token'];
     }else{
       header('location: /login');
     }
@@ -53,9 +53,9 @@
 
     $email = strtolower($email);
 
-    $v_user = mysqli_query($conn, "SELECT * FROM authme WHERE username='".$user_hash."'");
+    $v_user = mysqli_query($conn, "SELECT * FROM ".$table." WHERE username='".$user_hash."'");
 
-    $v_email = mysqli_query($conn, "SELECT * FROM authme WHERE email='".$email."'");
+    $v_email = mysqli_query($conn, "SELECT * FROM ".$table." WHERE email='".$email."'");
 
 
     if($user == ""){
@@ -80,10 +80,10 @@
       ]; 
       $pass_hash = password_hash($pass, PASSWORD_BCRYPT, $options);
 
-      $vkey = random_int(100000, 999999);
+      $token = random_int(100000, 999999);
 
-      $sql = "INSERT INTO authme (username, realname, password, email, vkey)
-      VALUES ('".$user_hash."', '".$user."', '".$pass_hash."', '".$email."', '".$vkey."')";
+      $sql = "INSERT INTO ".$table." (username, realname, password, email, token)
+      VALUES ('".$user_hash."', '".$user."', '".$pass_hash."', '".$email."', '".$token."')";
 
       if ($conn->query($sql) === TRUE) {
         // Se registro correctamente!
@@ -92,16 +92,16 @@
         $_SESSION['realname'] = $user;
         $_SESSION['password'] = $pass_hash;
         $_SESSION['email'] = $email;
-        $_SESSION['vkey'] = $vkey;
+        $_SESSION['token'] = $token;
         $_SESSION['online'] = 0;
 
-        // echo $_SESSION['vkey'];
+        // echo $_SESSION['token'];
 
         $to = $email;
         $subject = "Codigo de Verificacion";
         
         $message = "<h1>Tu codigo es:</h1>";
-        $message .= "<h1>".$vkey."</h1>";
+        $message .= "<h1>".$token."</h1>";
         
         $header = "From:".$companymail." \r\n";
         // $header .= "Cc:afgh@somedomain.com \r\n";
@@ -112,10 +112,9 @@
         
         if( $retval == false ) {
           // El email no se pudo enviar, asi que omitimos este paso...
-          $sql = "UPDATE authme SET vkey='VERIFY' WHERE username='".$_SESSION['username']."'";
+          $sql = "UPDATE ".$table." SET token='VERIFIED' WHERE username='".$_SESSION['username']."'";
           if ($conn->query($sql) === TRUE) {
-            $_SESSION['vkey'] = "VERIFY";
-            sleep(1);
+            $_SESSION['token'] = "VERIFIED";
             header('location: /login');
           }
         }
@@ -126,17 +125,17 @@
     
   }
 
-  if(isset($_POST['vkey'])){
+  if(isset($_POST['token'])){
     if($_POST['code'] == ""){
-      $error = $vkey_empty;
-    }else if($_POST['code'] == $_SESSION['vkey']){
-      $_SESSION['vkey'] = "VERIFY";
-      $sql = "UPDATE authme SET vkey='VERIFY' WHERE username='".$_SESSION['username']."'";
+      $error = $token_empty;
+    }else if($_POST['code'] == $_SESSION['token']){
+      $_SESSION['token'] = "VERIFIED";
+      $sql = "UPDATE ".$table." SET token='VERIFIED' WHERE username='".$_SESSION['username']."'";
       if ($conn->query($sql) === FALSE) {
-        $_SESSION['vkey'] = $_POST['code'];
+        $_SESSION['token'] = $_POST['code'];
         $error = $try_again;
       }else{
-        $_SESSION['vkey'] = "VERIFY";
+        $_SESSION['token'] = "VERIFIED";
         header('location: /login');
       }
     }else{
