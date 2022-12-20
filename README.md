@@ -1,2 +1,17 @@
 # Authme Web Panel PRO
-<img src="https://img.icons8.com/fluency/512/minecraft-golden-apple.png">
+### Conecta tu servidor con tu pagina web! Visualiza tu perfil e intercambia tu skin desde cualquier dispositivo!
+
+<br>
+<br>
+<br>
+
+## Requerimientos:
+### - <a href="https://www.spigotmc.org/resources/authmereloaded.6269/">Authme Reloaded</a>
+### - <a href="https://www.spigotmc.org/resources/skinsrestorer.2124/">Skins Restorer</a>
+### - Base de Datos.
+
+<br>
+<br>
+<br>
+
+## Configuracion Proximamente...
