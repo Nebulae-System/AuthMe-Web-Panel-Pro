@@ -9,7 +9,12 @@
   include('../config.php');
   
   // CREAMOS LA CONEXION
-  $conn = new mysqli($ip, $user, $pass, $db);
+  try{
+    $conn = new mysqli($ip, $user, $pass, $db);
+  }catch (Exception $e){
+    echo "<h1>Error:</h1><h2>Las especificaciones dentro del archivo 'config.php' no coinciden con la base de datos...</h2><br>".$e;
+  }
+
   try{
     $row = mysqli_query($conn, "ALTER TABLE ".$table." ADD column token VARCHAR(8) AFTER totp;");
   }catch (Exception $e){
