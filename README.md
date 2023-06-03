@@ -18,5 +18,5 @@
 ### passwordHash: BCRYPT
 ### kickNonRegistered: true
 ### registration:
-###      Enable registration on the server?
-###      enabled: false
+    ###      Enable registration on the server?
+    ###      enabled: false
