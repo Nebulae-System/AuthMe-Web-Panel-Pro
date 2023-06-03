@@ -15,8 +15,10 @@
 <br>
 
 ## Configuracion Authme - config.yml:
-### passwordHash: BCRYPT
-### kickNonRegistered: true
-### registration:
-    ###      Enable registration on the server?
-    ###      enabled: false
+    passwordHash: BCRYPT
+    
+    kickNonRegistered: true
+
+    registration:
+        Enable registration on the server?
+        enabled: false
