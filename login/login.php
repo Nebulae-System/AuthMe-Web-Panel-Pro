@@ -12,7 +12,12 @@
   try{
     $conn = new mysqli($ip, $user, $pass, $db);
   }catch (Exception $e){
-    echo "<h1>Error:</h1><h2>Las especificaciones dentro del archivo 'config.php' no coinciden con la base de datos...</h2><br>".$e;
+    if (str_contains($e , "mysqli_sql_exception: Unknown database") == true){
+      echo "<h1>Error:</h1>".$e."<br><h2>La base de datos llamada '".$db."' no existe.<br><br>Si el problema persiste, revisa la configuracion del sitio web y compara con la base de datos.</h2>";
+      exit();
+    }else{
+      echo "<h1>Error:</h1><h2>Las especificaciones dentro del archivo 'config.php' no coinciden con la base de datos...</h2><br>".$e;
+    }
   }
 
   try{
@@ -37,6 +42,7 @@
         header('location: /register');
       }
     }else{
+      // echo "<h1>Error:</h1><br><h2>Ha ocurrido un error inesperado al intentar configurar tu base de datos, por favor recarga la pagina...<h2>";
       echo "poto";
     }
   }
