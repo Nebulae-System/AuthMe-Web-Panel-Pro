@@ -14,4 +14,10 @@
 <br>
 <br>
 
-## Configuracion Proximamente...
+## Configuracion Authme - config.yml:
+### RECUERDA CAMBIAR EL CAMPO:
+### passwordHash: BCRYPT
+### kickNonRegistered: true
+### registration:
+###      Enable registration on the server?
+###      enabled: false

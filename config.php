@@ -2,14 +2,6 @@
 
 // OPCIONES EDITABLES | CONFIG
 
-// RECUERDA CAMBIAR EL CAMPO:
-// passwordHash: BCRYPT
-// kickNonRegistered: true
-// registration:
-//      Enable registration on the server?
-//      enabled: false
-// DEL ARCHIVO CONFIG DE AUTHME
-
 // IP O DOMINIO DEL HOST:
 $ip = "localhost";
 
