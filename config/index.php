@@ -3,6 +3,7 @@
 <html>
 <?php include('../header.php'); ?>
   <?php if($_SESSION['admin']){ ?>
+    <?php include('messages.php'); ?>
     <?php if($_SESSION['admin-messages']){ ?>
       <form method="post" class="container" novalidate>
         <h1>Registros</h1>

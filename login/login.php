@@ -12,20 +12,24 @@
   try{
     $conn = new mysqli($ip, $user, $pass, $db);
   }catch (Exception $e){
-    if (str_contains($e , "mysqli_sql_exception: Unknown database") == true){
-      echo "<h1>Error:</h1><br><h2>La base de datos llamada '".$db."' no existe.<br><br>Si el problema persiste, revisa la configuracion del sitio web y compara con la base de datos.</h2>";
-      exit();
-    }else{
-      echo "<h1>Error:</h1><h2>Las especificaciones dentro del archivo 'config.php' no coinciden con la base de datos...</h2><br>".$e;
-    }
+   include('../mantencion.php');
+   die();
+    // if (str_contains($e , "mysqli_sql_exception: Unknown database") == true){
+    //   echo "<h1>Error:</h1><br><h2>La base de datos llamada '".$db."' no existe.<br><br>Si el problema persiste, revisa la configuracion del sitio web y compara con la base de datos.</h2>";
+    //   exit();
+    // }else{
+    //   echo "<h1>Error:</h1><h2>Las especificaciones dentro del archivo 'config.php' no coinciden con la base de datos...</h2><br>".$e;
+    // }
   }
 
   try{
     $row = mysqli_query($conn, "ALTER TABLE ".$table." ADD column token VARCHAR(8) AFTER totp;");
   }catch (Exception $e){
     if (str_contains($e , "mysqli_sql_exception: Duplicate column name 'token'") == false){
-      echo "<h1>Error:</h1><br><h2>New Authme Panel PRO Requiere <a href='https://www.spigotmc.org/resources/authmereloaded.6269/'>AuthMeReloaded</a>.<br>(Requiere configurar base de datos).<br><br>Si el problema persiste, revisa la configuracion del sitio web y compara con la base de datos.</h2>";
-      exit();
+      include('../mantencion.php');
+      die();
+    //   echo "<h1>Error:</h1><br><h2>New Authme Panel PRO Requiere <a href='https://www.spigotmc.org/resources/authmereloaded.6269/'>AuthMeReloaded</a>.<br>(Requiere configurar base de datos).<br><br>Si el problema persiste, revisa la configuracion del sitio web y compara con la base de datos.</h2>";
+    //   exit();
     }
   }
 
@@ -51,7 +55,9 @@
     try{
       $result = mysqli_query($conn, "SELECT * FROM Players WHERE Nick='".$_SESSION['username']."'");
     }catch (Exception $e){
-      echo "<h1>Error:</h1><br><h2>New Authme Panel PRO Requiere <a href='https://www.spigotmc.org/resources/skinsrestorer.2124/'>SkinsRestorer</a>.<br>(Requiere configurar base de datos).</h2>";
+      include('../mantencion.php');
+      die();
+      // echo "<h1>Error:</h1><br><h2>New Authme Panel PRO Requiere <a href='https://www.spigotmc.org/resources/skinsrestorer.2124/'>SkinsRestorer</a>.<br>(Requiere configurar base de datos).</h2>";
     }
     if(mysqli_num_rows($result) == 1) {
       $fetch = mysqli_fetch_array($result);
@@ -129,7 +135,13 @@
           header('location: /register');
         }
         
-        $result = mysqli_query($conn, "SELECT * FROM Players WHERE Nick='".$_SESSION['username']."'");
+        try{
+          $result = mysqli_query($conn, "SELECT * FROM Players WHERE Nick='".$_SESSION['username']."'");
+        }catch (Exception $e){
+          include('../mantencion.php');
+          die();
+          // echo "<h1>Error:</h1><br><h2>New Authme Panel PRO Requiere <a href='https://www.spigotmc.org/resources/skinsrestorer.2124/'>SkinsRestorer</a>.<br>(Requiere configurar base de datos).</h2>";
+        }
         if(mysqli_num_rows($result) == 1) {
           $fetch = mysqli_fetch_array($result);
           // Tiene una skin que no es su nombre
@@ -165,7 +177,9 @@
     if($api['id'] == ""){
       $uuid = '../src/images/unknown.png';
     }else{
-      $uuid = 'https://crafatar.com/renders/body/'.$api['id'].'?scale=10&overlay';
+      // $uuid = 'https://crafatar.com/renders/body/'.$api['id'].'?scale=10&overlay';
+      // $uuid = 'https://visage.surgeplay.com/full/500/'.$api['id'];
+      $uuid = 'https://api.mineatar.io/body/full/'.$api['id'].'?scale=10';
     }
     return $uuid;
   }
