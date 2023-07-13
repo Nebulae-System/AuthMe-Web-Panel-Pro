@@ -17,7 +17,6 @@ Para acceder al "Wizard Config", simplemente ingresa a la página web principal 
 
 Es importante recordar cambiar estos valores predeterminados una vez ingresado al sistema, ya que podrían permitir que otra persona acceda sin tu permiso.
 
-¡Espero que esto te ayude a mejorar el texto para el README de tu proyecto en GitHub! Si tienes alguna otra pregunta, no dudes en preguntar.
 <br>
 <br>
 <br>
