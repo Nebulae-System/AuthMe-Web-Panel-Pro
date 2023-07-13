@@ -13,4 +13,4 @@
 
 </body>
 
-<footer>Desarrollado x oKidd © 2022</footer>
+<!-- <footer>Desarrollado x oKidd © 2022</footer> -->
