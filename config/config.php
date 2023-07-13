@@ -123,7 +123,108 @@ if(isset($_POST['messages-back'])){
   unset($_SESSION['admin-messages']);
 }
 
+if(isset($_POST['config'])){
+  $_SESSION['admin-config'] = true;
+}
+
+if(isset($_POST['config-back'])){
+  unset($_SESSION['admin-config']);
+}
+
+if(isset($_POST['connect'])){
+  //comprobar conexion
+  try{
+    $conn = new mysqli($_POST['ip'], $_POST['user'], $_POST['pass']);
+  }catch (Exception $e){
+    $problema = "Las especificaciones no coinciden con la base de datos...";
+    $error ="No se logro establecer la conexion con la base de datos...";
+    $img = "https://img.icons8.com/?size=512&id=63263&format=png";
+    $back = "/config";
+    include('error.php');
+    die();
+  }
+  // Aqui debes generar la conexion a los datos que propone el usuario. luego lo rediriges a la siguente pag si conecta
+  editFile('../config.php', '$ip =', '$ip = "'.$_POST['ip'].'";');
+  editFile('../config.php', '$user =', '$user = "'.$_POST['user'].'";');
+  editFile('../config.php', '$pass =', '$pass = "'.$_POST['pass'].'";');
+  $img = "https://img.icons8.com/?size=512&id=63262&format=png";
+  $_SESSION['admin-db'] = true;
+}
+
+if(isset($_POST['db-back'])){
+  unset($_SESSION['admin-db']);
+}
+
+if(isset($_POST['verify-db'])){
+  //comprobar conexion
+  try{
+    $conn = new mysqli($ip, $user, $pass, $_POST['db']);
+  }catch (Exception $e){
+    $problema = "La base de datos con ese nombre no existe...";
+    $error ="No se logro establecer la conexion con la base de datos...";
+    $img = "https://img.icons8.com/?size=512&id=63263&format=png";
+    $back = "/config";
+    include('error.php');
+    die();
+  }
+  editFile('../config.php', '$db =', '$db = "'.$_POST['db'].'";');
+  try{
+    $row = mysqli_query($conn, "SELECT * FROM ".$_POST['table'].";");
+  }catch (Exception $e){
+    $problema = "La tabla con ese nombre no existe dentro de la base de datos...";
+    $error ="No se logro establecer la conexion con la base de datos...";
+    $img = "https://img.icons8.com/?size=512&id=63263&format=png";
+    $back = "/config";
+    include('error.php');
+    die();
+  }
+  editFile('../config.php', '$table =', '$table = "'.$_POST['table'].'";');
+  $img = "https://img.icons8.com/?size=512&id=63262&format=png";
+  $problema = "Conexion establecida correctamente!";
+  $back = "/config";
+  unset($_SESSION['admin-db']);
+  unset($_SESSION['admin-config']);
+  include('error.php');
+  die();
+}
+
 if(isset($_POST['logout'])){
   unset($_SESSION['admin']);
 }
+
+
+
+
+function editFile($archivo, $linea, $reemplazo) {
+  // Leer el contenido del archivo
+  $contenido = file_get_contents($archivo);
+
+  // Dividir el contenido en un array de líneas
+  $lineas = explode("\n", $contenido);
+
+  // Buscar la línea que contiene la palabra clave
+  $lineaEncontrada = false;
+  for ($i = 1; $i < count($lineas); $i++) {
+      if (strpos($lineas[$i], $linea) !== false) {
+          $lineas[$i] = $reemplazo;
+          $lineaEncontrada = true;
+          break;
+      }
+  }
+
+  if ($lineaEncontrada) {
+      // Unir las líneas nuevamente en un solo texto
+      $contenidoModificado = implode("\n", $lineas);
+
+      // Escribir el contenido modificado en el archivo
+      file_put_contents($archivo, $contenidoModificado);
+    // echo "La línea que contiene '$linea' se ha actualizado correctamente.";
+  } else {
+    echo "ERROR: No se encontró la linea, puede que el archivo 'config.php' haya sido manipulado...";
+  }
+}
+
+
+
+
 ?>

@@ -1,4 +1,3 @@
-<?php include('config.php'); ?>
 <!DOCTYPE html>
 <html>
 <?php include('../header.php'); ?>
