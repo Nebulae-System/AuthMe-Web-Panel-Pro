@@ -1,6 +1,7 @@
 # Authme Web Panel PRO
 ### Conecta tu servidor con tu pagina web! Visualiza tu perfil e intercambia tu skin desde cualquier dispositivo!
 <br>
+
 ## Descripción del Proyecto
 
 Este proyecto consiste en un panel web diseñado para usuarios de servidores de Minecraft. Proporciona funciones como el registro de usuarios, inicio de sesión, edición de contraseñas y vinculación de correos electrónicos a las cuentas. Además, cuenta con la capacidad de cambiar la skin del personaje gracias a la integración del plugin "SkinRestorer", que permite utilizar skins en servidores no premium.
